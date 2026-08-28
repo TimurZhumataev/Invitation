@@ -24,6 +24,7 @@
   html,body{
     margin:0;
     padding:0;
+    width:100%;
     min-height:100vh;
     background:
       radial-gradient(circle at 20% 15%, rgba(255,255,255,.35), transparent 45%),
@@ -40,19 +41,18 @@
 
   .stage{
     width:100%;
-    max-width:460px;
-    padding:34px 18px;
+    max-width:640px;
+    padding:34px 26px;
     display:flex;
     align-items:center;
     justify-content:center;
     perspective:1400px;
   }
 
-  /* ---------------- Envelope (closed state) ---------------- */
   #envelope{
     position:relative;
     width:100%;
-    max-width:360px;
+    max-width:480px;
     cursor:pointer;
     user-select:none;
     transition:opacity .7s ease .15s, transform .7s ease .15s;
@@ -124,11 +124,10 @@
   }
   #envelope.opened + .env-hint{ opacity:0; }
 
-  /* ---------------- Letter (revealed state) ---------------- */
   #letter{
     position:absolute;
     width:100%;
-    max-width:400px;
+    max-width:520px;
     left:50%;
     transform:translate(-50%, 26px);
     opacity:0;
@@ -145,7 +144,7 @@
     background:var(--bg-card);
     border:1px solid var(--line);
     box-shadow:0 30px 60px -24px rgba(51,58,44,.4);
-    padding:44px 34px 40px;
+    padding:44px 20px 40px;
     position:relative;
   }
 
@@ -179,11 +178,22 @@
     text-align:center;
     font-family:'Cormorant Garamond', serif;
     font-weight:600;
-    font-size:42px;
-    line-height:1.15;
+    font-size:32px;
+    line-height:1.25;
     margin:0 0 22px;
     color:var(--ink);
-    letter-spacing:.3px;
+    letter-spacing:.2px;
+  }
+
+  .poem{
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:500;
+    font-size:19px;
+    line-height:1.7;
+    color:var(--ink);
+    margin:0 0 26px;
   }
 
   .divider{
@@ -278,12 +288,42 @@
   }
 
   @media (max-width:400px){
-    h1{ font-size:34px; }
-    .card{ padding:36px 22px 32px; }
+    h1{ font-size:27px; }
+    .card{ padding:36px 16px 32px; }
   }
 
   @media (prefers-reduced-motion: reduce){
     *{ transition:none !important; animation:none !important; }
+  }
+
+  #confetti-layer{
+    position:fixed;
+    inset:0;
+    pointer-events:none;
+    overflow:hidden;
+    z-index:50;
+  }
+
+  .confetti-piece{
+    position:absolute;
+    top:-20px;
+    width:8px;
+    height:14px;
+    opacity:.9;
+    animation-name:confetti-fall;
+    animation-timing-function:cubic-bezier(.4,0,.6,1);
+    animation-fill-mode:forwards;
+  }
+
+  @keyframes confetti-fall{
+    0%{
+      transform:translateY(0) translateX(0) rotate(0deg);
+      opacity:1;
+    }
+    100%{
+      transform:translateY(105vh) translateX(var(--drift,0px)) rotate(var(--spin,360deg));
+      opacity:.85;
+    }
   }
 </style>
 </head>
@@ -300,7 +340,7 @@
             <div class="seal" id="seal"><span>Б</span></div>
           </div>
         </div>
-        <div class="env-hint">— нажмите на конверт, чтобы открыть письмо —</div>
+        <div class="env-hint">— Конвертти ачуу үчүн басыңыз —</div>
       </div>
 
       <div id="letter">
@@ -313,15 +353,9 @@
             <path d="M32 30 C38 26 46 26 52 22 C46 18 38 18 32 22" stroke="currentColor" stroke-width="1.2"/>
           </svg>
 
-          <p class="eyebrow">Новоселье</p>
-          <h1>Добро пожаловать<br>в новый дом</h1>
+          <h1>Ардактуу жана кадырлуу коноктор!</h1>
+          <p class="poem">Ак өргөө тоюбузга кош келиңиз,<br>Жакшы тилек, ак батаңыз бериңиз.<br>Сиздер берген аруу ниет, дубалар,<br>Кабыл болуп, бирге болсун дилибиз.</p>
           <div class="divider"></div>
-
-          <p class="intro">
-            С радостью приглашаю вас разделить этот особенный день —
-            день, когда двери нового дома открываются для друзей.<br><br>
-            Хозяин дома — <span class="host">Байыш</span>
-          </p>
 
           <div class="details">
             <div class="detail-row">
@@ -333,7 +367,7 @@
               </svg>
               <div class="detail-text">
                 <span class="label">Дата</span>
-                <span class="value">1 сентября</span>
+                <span class="value">3-сентябрь</span>
               </div>
             </div>
 
@@ -343,30 +377,57 @@
                 <circle cx="12" cy="9.6" r="2.6"/>
               </svg>
               <div class="detail-text">
-                <span class="label">Адрес</span>
-                <span class="value">ул. Жабинова, 39</span>
+                <span class="label">Дареги</span>
+                <span class="value">Жабинова көчөсү, 35</span>
               </div>
             </div>
           </div>
 
-          <p class="closing">
-            Буду рад видеть вас в кругу близких людей —<br>
-            с теплом, уютом и хорошим настроением.
-          </p>
-
-          <p class="signature">С нетерпением жду встречи<small>Байыш</small></p>
+          <p class="signature">Күтөбүз!<small>Байыш&amp;Асель</small></p>
         </div>
       </div>
 
     </div>
   </div>
 
+  <div id="confetti-layer"></div>
+
+  <audio id="bg-music" src="song.mp3" preload="auto"></audio>
+
 <script>
   const envelope = document.getElementById('envelope');
   const flap = document.getElementById('flap');
   const seal = document.getElementById('seal');
   const letter = document.getElementById('letter');
+  const confettiLayer = document.getElementById('confetti-layer');
+  const bgMusic = document.getElementById('bg-music');
   let opened = false;
+
+  const confettiColors = ['#C08E52', '#7C8768', '#A5814B', '#E3B04B', '#B85C5C', '#8FA6B2', '#D9D0B8'];
+
+  function spawnConfetti(){
+    const count = 70;
+    for(let i = 0; i < count; i++){
+      const piece = document.createElement('div');
+      piece.className = 'confetti-piece';
+      const left = Math.random() * 100;
+      const drift = (Math.random() * 160 - 80) + 'px';
+      const spin = (Math.random() * 720 - 360) + 'deg';
+      const duration = 2.6 + Math.random() * 1.8;
+      const delay = Math.random() * 0.5;
+      const color = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+      const isCircle = Math.random() > 0.5;
+      piece.style.left = left + 'vw';
+      piece.style.setProperty('--drift', drift);
+      piece.style.setProperty('--spin', spin);
+      piece.style.animationDuration = duration + 's';
+      piece.style.animationDelay = delay + 's';
+      piece.style.background = color;
+      piece.style.borderRadius = isCircle ? '50%' : '2px';
+      confettiLayer.appendChild(piece);
+      setTimeout(() => piece.remove(), (duration + delay) * 1000 + 200);
+    }
+  }
 
   function openLetter(){
     if(opened) return;
@@ -377,6 +438,9 @@
     setTimeout(()=>{
       envelope.classList.add('opened');
       letter.classList.add('show');
+      spawnConfetti();
+      bgMusic.currentTime = 0;
+      bgMusic.play().catch(()=>{});
     }, 420);
   }
 
